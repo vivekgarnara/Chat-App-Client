@@ -9,6 +9,8 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { Grid, Link } from '@mui/material';
+import axios from 'axios';
 
 const defaultTheme = createTheme();
 
@@ -16,17 +18,22 @@ export function Login() {
 
     const navigate = useNavigate();
 
-    const login = () => {
-        navigate("/chat");
-    }
-    // const handleSubmit = (event) => {
-    //     event.preventDefault();
-    //     const data = new FormData(event.currentTarget);
-    //     console.log({
-    //         email: data.get('email'),
-    //         password: data.get('password'),
-    //     });
-    // };
+    // const login = () => {
+    //     navigate("/chat");
+    // }
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        const data = new FormData(event.currentTarget);
+        const email = data.get('email');
+        const password = data.get('password');
+
+        axios.post('http://localhost:3001/login', { email, password })
+            .then(result => {
+                localStorage.setItem('token', result.data.token);
+                navigate("/chat");
+            })
+            .catch(error => console.log(error))
+    };
 
     return (
         <ThemeProvider theme={defaultTheme}>
@@ -46,7 +53,7 @@ export function Login() {
                     <Typography component="h1" variant="h5">
                         Sign in
                     </Typography>
-                    <Box component="form" onSubmit={login} noValidate sx={{ mt: 1 }}>
+                    <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
                         <TextField
                             margin="normal"
                             required
@@ -76,7 +83,18 @@ export function Login() {
                         >
                             Login
                         </Button>
-
+                        <Grid container>
+                            <Grid item xs>
+                                <Link href="#" variant="body2">
+                                    Forgot password?
+                                </Link>
+                            </Grid>
+                            <Grid item>
+                                <Link href="/register" variant="body2">
+                                    {"Don't have an account? Sign Up"}
+                                </Link>
+                            </Grid>
+                        </Grid>
                     </Box>
                 </Box>
             </Container>

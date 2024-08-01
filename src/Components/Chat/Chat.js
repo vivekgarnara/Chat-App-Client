@@ -2,10 +2,13 @@ import './Chat.css';
 import io from 'socket.io-client';
 import { useEffect, useState } from 'react';
 import SendRoundedIcon from '@mui/icons-material/SendRounded';
+import { useNavigate } from 'react-router-dom';
 
 const socket = io.connect("http://localhost:3001");
 
 export function Chat() {
+
+  const navigate = useNavigate();
 
   const [messageToSend, setMessageToSend] = useState("");
   const [storedMessages, setStoredMessages] = useState([]);
@@ -29,8 +32,14 @@ export function Chat() {
     };
   }, [socket]);
 
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    navigate("/login");
+  }
+
   return (
     <div className="abc">
+      <button onClick={handleLogout}>Logout</button>
       <div className='app-container'>
           <div className='upr-section'>
             <h2 className="section-title">Messages</h2>
