@@ -11,6 +11,8 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Grid, Link } from '@mui/material';
 import axios from 'axios';
+import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from 'react-toastify';
 
 const defaultTheme = createTheme();
 
@@ -27,17 +29,31 @@ export function Login() {
         const email = data.get('email');
         const password = data.get('password');
 
-        axios.post('http://localhost:3001/login', { email, password })
+        axios.post('http://localhost:3001/api/login', { email, password })
             .then(result => {
+                console.log(result);
                 localStorage.setItem('token', result.data.token);
-                navigate("/chat");
+                navigate("/home");
             })
-            .catch(error => console.log(error))
+            .catch(error => {
+                console.log(error);
+                toast.error(`${error.response.data.message}`, {
+                    position: "top-right",
+                    autoClose: 2000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "colored",
+                });
+            })
     };
 
     return (
         <ThemeProvider theme={defaultTheme}>
             <Container component="main" maxWidth="xs">
+            <ToastContainer />
                 <CssBaseline />
                 <Box
                     sx={{

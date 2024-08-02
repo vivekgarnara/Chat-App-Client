@@ -3,10 +3,14 @@ import io from 'socket.io-client';
 import { useEffect, useState } from 'react';
 import SendRoundedIcon from '@mui/icons-material/SendRounded';
 import { useNavigate } from 'react-router-dom';
+import { Button } from '@mui/material';
 
 const socket = io.connect("http://localhost:3001");
 
 export function Chat() {
+
+  // const location = useLocation();
+  // var firstLogin = location.state;
 
   const navigate = useNavigate();
 
@@ -32,32 +36,31 @@ export function Chat() {
     };
   }, [socket]);
 
-  const handleLogout = () => {
-    localStorage.removeItem('token');
-    navigate("/login");
+  const handleBack = () => {
+    navigate('/home');
   }
 
   return (
     <div className="abc">
-      <button onClick={handleLogout}>Logout</button>
+      <Button onClick={handleBack}>Back</Button>
       <div className='app-container'>
-          <div className='upr-section'>
-            <h2 className="section-title">Messages</h2>
-            <ul className="message-list">
-              {storedMessages.map((message, index) => (
-                <li key={index} className={`message-item ${message.type === "sent" ? "sent" : "received"}`}>
-                  <div className="message-content">{message.content}</div>
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div className='bottom-section'>
-            <input className="message-input" placeholder="Enter message" value={messageToSend} onChange={(event) => {
-              setMessageToSend(event.target.value);
-            }} />
-            <button className="send-button" onClick={sendMessage}><SendRoundedIcon/></button>
-          </div>
+        <div className='upr-section'>
+          <h2 className="section-title">Messages</h2>
+          <ul className="message-list">
+            {storedMessages.map((message, index) => (
+              <li key={index} className={`message-item ${message.type === "sent" ? "sent" : "received"}`}>
+                <div className="message-content">{message.content}</div>
+              </li>
+            ))}
+          </ul>
         </div>
+        <div className='bottom-section'>
+          <input className="message-input" placeholder="Enter message" value={messageToSend} onChange={(event) => {
+            setMessageToSend(event.target.value);
+          }} />
+          <button className="send-button" onClick={sendMessage}><SendRoundedIcon /></button>
+        </div>
+      </div>
     </div>
   );
 }
