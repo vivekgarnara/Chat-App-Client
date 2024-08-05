@@ -2,20 +2,25 @@ import './Chat.css';
 import io from 'socket.io-client';
 import { useEffect, useState } from 'react';
 import SendRoundedIcon from '@mui/icons-material/SendRounded';
-import { useNavigate } from 'react-router-dom';
-import { Button } from '@mui/material';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { Button, Container } from '@mui/material';
+import Navbar from '../Navbar/Navbar';
+import { jwtDecode } from 'jwt-decode';
 
 const socket = io.connect("http://localhost:3001");
 
 export function Chat() {
 
-  // const location = useLocation();
-  // var firstLogin = location.state;
+  const [messageToSend, setMessageToSend] = useState("");
+  const [storedMessages, setStoredMessages] = useState([]);
 
   const navigate = useNavigate();
 
-  const [messageToSend, setMessageToSend] = useState("");
-  const [storedMessages, setStoredMessages] = useState([]);
+  const location = useLocation();
+  const receiverId = location.state?.receiverId;
+
+  const jwtToken = localStorage.getItem('token');
+    const decodedToken = jwtDecode(jwtToken);
 
   const sendMessage = () => {
     if (messageToSend) {
@@ -41,10 +46,11 @@ export function Chat() {
   }
 
   return (
-    <div className="abc">
-      <Button onClick={handleBack}>Back</Button>
-      <div className='app-container'>
+    <Container className="abc">
+      <Navbar />
+      <Container className='app-container'>
         <div className='upr-section'>
+          <Button onClick={handleBack} sx={{ position: 'absolute', left: '0', top: '16px' }}>Back</Button>
           <h2 className="section-title">Messages</h2>
           <ul className="message-list">
             {storedMessages.map((message, index) => (
@@ -60,7 +66,7 @@ export function Chat() {
           }} />
           <button className="send-button" onClick={sendMessage}><SendRoundedIcon /></button>
         </div>
-      </div>
-    </div>
+      </Container>
+    </Container>
   );
 }

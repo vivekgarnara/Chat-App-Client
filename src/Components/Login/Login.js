@@ -19,10 +19,6 @@ const defaultTheme = createTheme();
 export function Login() {
 
     const navigate = useNavigate();
-
-    // const login = () => {
-    //     navigate("/chat");
-    // }
     const handleSubmit = (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
@@ -31,8 +27,17 @@ export function Login() {
 
         axios.post('http://localhost:3001/api/login', { email, password })
             .then(result => {
-                console.log(result);
                 localStorage.setItem('token', result.data.token);
+                toast.success('User login successfully!', {
+                    position: "top-right",
+                    autoClose: 2000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "colored",
+                });
                 navigate("/home");
             })
             .catch(error => {
@@ -53,7 +58,6 @@ export function Login() {
     return (
         <ThemeProvider theme={defaultTheme}>
             <Container component="main" maxWidth="xs">
-            <ToastContainer />
                 <CssBaseline />
                 <Box
                     sx={{

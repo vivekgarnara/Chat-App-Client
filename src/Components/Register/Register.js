@@ -13,11 +13,13 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import axios from 'axios';
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer, toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 
 
 const defaultTheme = createTheme();
 
 export default function Register() {
+    const navigate = useNavigate();
     const handleSubmit = async (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
@@ -28,7 +30,6 @@ export default function Register() {
 
         axios.post('http://localhost:3001/api/signup', { firstName, lastName, email, password })
             .then(result => {
-                console.log(result);
                 toast.success('User registration successfully!', {
                     position: "top-right",
                     autoClose: 2000,

@@ -6,6 +6,8 @@ import axios from 'axios';
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer, toast } from 'react-toastify';
 import io from 'socket.io-client';
+import Navbar from '../Navbar/Navbar';
+import { jwtDecode } from 'jwt-decode';
 
 const defaultTheme = createTheme();
 const socket = io.connect("http://localhost:3001");
@@ -17,21 +19,12 @@ export function Profile() {
     const navigate = useNavigate();
 
     const jwtToken = localStorage.getItem('token');
-    function parseJwt(token) {
-        const base64Url = token.split('.')[1];
-        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-        const jsonPayload = decodeURIComponent(atob(base64).split('').map(function (c) {
-            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-        }).join(''));
-
-        return JSON.parse(jsonPayload);
-    };
+    const decodedToken = jwtDecode(jwtToken);
 
     const handleBack = () => {
         navigate('/home');
     }
 
-    const decodedToken = parseJwt(jwtToken);
     var userId = decodedToken.userId;
 
     React.useEffect(() => {
@@ -88,9 +81,9 @@ export function Profile() {
 
     return (
         <ThemeProvider theme={defaultTheme}>
+            <Navbar />
             <Button onClick={handleBack}>Back</Button>
             <Container component="main" maxWidth="xs">
-                <ToastContainer />
                 <CssBaseline />
                 <Box
                     sx={{
@@ -148,7 +141,7 @@ export function Profile() {
                             fullWidth
                             variant="contained"
                             sx={{ mt: 3, mb: 2 }}
-                            // disabled={!isFormUpdated}
+                        // disabled={!isFormUpdated}
                         >
                             Save
                         </Button>
