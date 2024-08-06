@@ -27,8 +27,8 @@ export function ChatList() {
         fetchChatUsers();
     }, []);
 
-    const handleUserChatClick = (receiverId) => {
-        navigate('/chat', { state: { receiverId } });
+    const handleUserChatClick = (receiver) => {
+        navigate('/chat', { state: { receiver } });
     }
 
     return (
@@ -42,7 +42,7 @@ export function ChatList() {
                     <div key={user._id}>
                         {user._id !== decodedToken.userId && (
                             <>
-                                <ListItem button onClick={()=>handleUserChatClick(user._id)}>
+                                <ListItem button onClick={()=>handleUserChatClick(user)}>
                                     <ListItemText
                                         primary={`${user.firstName} ${user.lastName} (${user._id})`}
                                         secondary={user.email}

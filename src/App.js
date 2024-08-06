@@ -12,21 +12,19 @@ import { ToastContainer } from 'react-toastify';
 function App() {
 
   return (
-
-      <div className="App">
-        <BrowserRouter>
-          <Routes>
-            <Route exact path='/' element={<Login />} />
-            <Route path='/login' element={<Login />} />
-            <Route path='/register' element={<Register />} />
-            <Route path='/home' element={<Home />} />
-            <Route path='/profile' element={<Profile />} />
-            <Route path='/chat' element={<Chat />} />
-            <Route path='/chat-list' element={<ChatList />} />
-          </Routes>
-        </BrowserRouter>
-      </div>
-  
+    <div className="App">
+      <BrowserRouter>
+        <Routes>
+          <Route exact path='/' element={<Login />} />
+          <Route path='/login' element={<Login />} />
+          <Route path='/register' element={<Register />} />
+          <Route path='/home' element={<Home />} />
+          <Route path='/profile' element={<Profile />} />
+          <Route path='/chat' element={<Chat />} />
+          <Route path='/chat-list' element={<ChatList />} />
+        </Routes>
+      </BrowserRouter>
+    </div>
   );
 }
 

@@ -20,6 +20,7 @@ import { useNavigate } from 'react-router-dom';
 import { Tooltip } from '@mui/material';
 import axios from 'axios';
 import io from 'socket.io-client';
+import { jwtDecode } from 'jwt-decode';
 
 const socket = io.connect("http://localhost:3001");
 
@@ -68,6 +69,10 @@ export default function Navbar() {
     const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
     const [notifications, setNotifications] = React.useState(null);
     const [noti, setNoti] = React.useState([]);
+    const [user, setUser] = React.useState(null);
+
+    const jwtToken = localStorage.getItem('token');
+    const decodedToken = jwtDecode(jwtToken);
 
     const isMenuOpen = Boolean(anchorEl);
     const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
@@ -78,6 +83,22 @@ export default function Navbar() {
         localStorage.removeItem('token');
         navigate("/login");
     }
+
+    var userId = decodedToken.userId;
+
+    React.useEffect(() => {
+        // Fetch user profile initially
+        const fetchUserProfile = async () => {
+            try {
+                const response = await axios.get(`http://localhost:3001/api/getUser/${userId}`);
+                setUser(response.data);
+            } catch (error) {
+                console.error(error.message);
+            }
+        };
+
+        fetchUserProfile();
+    }, [userId]);
 
     React.useEffect(() => {
         // Fetch user profile initially
@@ -94,7 +115,7 @@ export default function Navbar() {
 
     React.useEffect(() => {
         socket.on("profileUpdateNotification", (data) => {
-            setNoti([{notiMessage : data, isSeen : false}, ...noti]);
+            setNoti([{ notiMessage: data, isSeen: false }, ...noti]);
             console.log(noti);
         });
 
@@ -238,7 +259,15 @@ export default function Navbar() {
                         />
                     </Search>
                     <Box sx={{ flexGrow: 1 }} />
-                    <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
+                    <Box sx={{ display: { xs: 'none', md: 'flex' }, alignItems: 'center' }}>
+                        <Typography
+                            variant="h6"
+                            noWrap
+                            component="div"
+                            sx={{ display: { xs: 'none', sm: 'block' } }}
+                        >
+                            Welcome,{user ? user.firstName : ""} {user ? user.lastName : ""}
+                        </Typography>
                         <IconButton
                             size="large"
                             aria-label="show 17 new notifications"
