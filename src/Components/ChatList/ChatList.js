@@ -29,7 +29,7 @@ export function ChatList() {
 
     const handleUserChatClick = (receiver) => {
         navigate('/chat', { state: { receiver } });
-    }
+    };
 
     return (
         <Container className="abcd">

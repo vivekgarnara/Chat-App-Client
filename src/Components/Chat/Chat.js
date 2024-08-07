@@ -56,19 +56,19 @@ export function Chat() {
 
     socket.emit("joinRoom", receiverId);
 
-    const previousMessages = axios.get('http://localhost:3001/api/getMessages', {
+    axios.get('http://localhost:3001/api/getMessages', {
       params: {
         senderId: senderId,
         receiverId: receiverId
       }
-    });
-    console.log("previousMessages", previousMessages);
+    }).then((response) => {
+      setStoredMessages(response.data);
+    }).catch((error) => console.log(error));
 
-    setStoredMessages([previousMessages]);
   }, [])
 
   const handleBack = () => {
-    navigate('/home');
+    navigate('/chat-list');
   }
 
   return (

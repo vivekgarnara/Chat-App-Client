@@ -21,6 +21,7 @@ import { Tooltip } from '@mui/material';
 import axios from 'axios';
 import io from 'socket.io-client';
 import { jwtDecode } from 'jwt-decode';
+import AlertDialog from '../AlertDialog/AlertDialog';
 
 const socket = io.connect("http://localhost:3001");
 
@@ -228,6 +229,12 @@ export default function Navbar() {
         </Menu>
     );
 
+    const dialogResult = (result) => {
+        if (result) {
+            handleLogout();
+        }
+    }
+
     return (
         <Box sx={{ flexGrow: 1 }}>
             <AppBar position="static">
@@ -280,17 +287,7 @@ export default function Navbar() {
                                 <NotificationsIcon />
                             </Badge>
                         </IconButton>
-                        <Tooltip title="Logout">
-                            <IconButton
-                                size="large"
-                                aria-label="logout button"
-                                color="inherit"
-                                onClick={handleLogout}
-                                toolb
-                            >
-                                <LogoutIcon />
-                            </IconButton>
-                        </Tooltip>
+                        <AlertDialog alertHandler={dialogResult} sourceText="logout" />
                     </Box>
                     <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
                         <IconButton
